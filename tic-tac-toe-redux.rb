@@ -4,8 +4,15 @@ COMPUTER_NAME = "Unimatrix Zero"
 PLAYER1_MARKER = "X"
 PLAYER2_MARKER = "O"
 WINNING_BOARDS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
-CENTER = [4]
+WINNING_BOARDS_NEW = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
+CENTER = 4
+CENTER_NEW = 5
 CORNERS = [0,2,6,8]
+CORNERS_NEW =[1,3,7,9]
+EDGES = [1,3,5,7]
+EDGES_NEW = [2,4,6,8]
+EDGES_HASH = {1 => [0,2,4,7], 3 => [1,4,5,7], 5 => [2,3,4,8], 7 => [1,4,6,8]}
+EDGES_HASH_NEW = {2 => [1,3,5,8], 4 => [2,5,6,8], 6 => [3,4,5,9], 8 => [2,5,6,9]}
 
 def show_board(board)
   puts "\n====== Current board ======"
@@ -49,7 +56,7 @@ def get_player_name(player)
 end
 
 def get_open_spots(board)
-  board.select {|x| x-1 if x.is_a?(Fixnum)}
+  board.select {|x| x.is_a?(Fixnum)}
 end
 
 def draw?(board)
@@ -79,39 +86,42 @@ def find_wins(board,marker)
   open_spots = get_open_spots(board)
   wins = []
   open_spots.each do |spot|
-    board[spot] = marker
+    board[spot-1] = marker
     wins.push(spot) if win?(board)
-    board[spot] = spot+1
+    board[spot-1] = spot
   end
   wins
 end
+
+def first_pick(board)
+  opponent_picks = get_picked(board,PLAYER1_MARKER)
+  if opponent_picks.include?(CENTER_NEW)
+    (CORNERS_NEW-opponent_picks).sample
+  elsif !(opponent_picks & CORNERS_NEW).empty?
+    CENTER_NEW
+  else
+    EDGES_HASH_NEW[opponent_picks[0]].sample
+  end
+end 
 
 def get_computer_pick(board)
   puts "Thinking...."
   sleep(1)
   puts "Thinking...."
   sleep(1)
-  wins = find_wins(board,PLAYER2_MARKER)
-  open_spots = get_open_spots(board)
-  if !wins.empty?
-    wins.sample
+  computer_picks = get_picked(board,PLAYER2_MARKER)
+  if(computer_picks.empty?) #computers first move
+    first_pick(board)
   else
-    losses = find_wins(board,PLAYER1_MARKER)
-    if !losses.empty?
-      losses.sample
+    wins = find_wins(board,PLAYER2_MARKER)
+    if !wins.empty?
+      wins.sample
     else
-      center_open = open_spots.include?(4)
-      if center_open
-        4
+      losses = find_wins(board,PLAYER1_MARKER)
+      if !losses.empty?
+        losses.sample
       else
-        CORNERS.each do |spot|
-          any_corner.push(spot) if open_spots.include?(spot-1)
-        end
-        if !any_corner.empty?
-          any_corner.sample
-        else
-          open_spots.sample-1
-        end
+        get_open_spots(board).sample
       end
     end
   end
