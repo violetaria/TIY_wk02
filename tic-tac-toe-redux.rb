@@ -5,14 +5,10 @@ PLAYER1_MARKER = "X"
 PLAYER2_MARKER = "O"
 WINNING_BOARDS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
 WINNING_BOARDS_NEW = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
-CENTER = 4
-CENTER_NEW = 5
-CORNERS = [0,2,6,8]
-CORNERS_NEW =[1,3,7,9]
-EDGES = [1,3,5,7]
-EDGES_NEW = [2,4,6,8]
-EDGES_HASH = {1 => [0,2,4,7], 3 => [1,4,5,7], 5 => [2,3,4,8], 7 => [1,4,6,8]}
-EDGES_HASH_NEW = {2 => [1,3,5,8], 4 => [2,5,6,8], 6 => [3,4,5,9], 8 => [2,5,6,9]}
+CENTER = 5
+CORNERS =[1,3,7,9]
+EDGES = [2,4,6,8]
+EDGES_HASH = {2 => [1,3,5,8], 4 => [2,5,6,8], 6 => [3,4,5,9], 8 => [2,5,6,9]}
 
 def show_board(board)
   puts "\n====== Current board ======"
@@ -95,14 +91,14 @@ end
 
 def first_pick(board)
   opponent_picks = get_picked(board,PLAYER1_MARKER)
-  if opponent_picks.include?(CENTER_NEW)
-    (CORNERS_NEW-opponent_picks).sample
-  elsif !(opponent_picks & CORNERS_NEW).empty?
-    CENTER_NEW
+  if opponent_picks.include?(CENTER)
+    (CORNERS-opponent_picks).sample
+  elsif !(opponent_picks & CORNERS).empty?
+    CENTER
   else
-    EDGES_HASH_NEW[opponent_picks[0]].sample
+    EDGES_HASH[opponent_picks[0]].sample
   end
-end 
+end
 
 def get_computer_pick(board)
   puts "Thinking...."
