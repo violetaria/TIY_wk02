@@ -3,9 +3,9 @@ require 'pry'
 COMPUTER_NAME = "Unimatrix Zero"
 PLAYER1_MARKER = "X"
 PLAYER2_MARKER = "O"
-WINNING_BOARDS = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
-CENTER = [5]
-CORNERS = [1,3,7,9]
+WINNING_BOARDS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+CENTER = [4]
+CORNERS = [0,2,6,8]
 
 def show_board(board)
   puts "\n====== Current board ======"
@@ -48,29 +48,20 @@ def get_player_name(player)
   gets.chomp
 end
 
-def get_open(board)
-  board.select {|x| x.is_a?(Fixnum)}
+def get_open_spots(board)
+  board.select {|x| x-1 if x.is_a?(Fixnum)}
 end
 
 def draw?(board)
-  get_open(board).empty?
+  get_open_spots(board).empty?
 end
 
-def win_new?(board)
+def win?(board)
   WINNING_BOARDS.any? { |x,y,z| board[x]==board[y] && board[y]==board[z] }
 end
 
-def win?(picks)
-  pick_combos = picks.sort.combination(3).to_a
-  !(pick_combos & WINNING_BOARDS).empty?
-end
-
-binding.pry
-
 def game_over?(board)
-  player1_picks = get_picked(board,PLAYER1_MARKER)
-  player2_picks = get_picked(board,PLAYER2_MARKER)
-  win?(player1_picks) || win?(player2_picks) || draw?(board)
+  win?(board) || draw?(board)
 end
 
 def get_picked(board,marker)
@@ -80,22 +71,17 @@ def get_picked(board,marker)
 end
 
 def get_pick
-  print "Choose wisely: "
+  print "Select an open spot. Choose wisely: "
   gets.chomp.to_i
 end
 
-def pick_random(board)
-  open_spots(board).sample
-end
-
-def find_wins(board,my_markers)
-  picks = get_picked(board,my_markers)
-  open_spots = get_open(board)
+def find_wins(board,marker)
+  open_spots = get_open_spots(board)
   wins = []
   open_spots.each do |spot|
-    potential_picks = picks.push(spot).sort
-    wins.push (spot) if win?(potential_picks)
-    picks.delete(spot)
+    board[spot] = marker
+    wins.push(spot) if win?(board)
+    board[spot] = spot+1
   end
   wins
 end
@@ -106,7 +92,7 @@ def get_computer_pick(board)
   puts "Thinking...."
   sleep(1)
   wins = find_wins(board,PLAYER2_MARKER)
-  open_spots = get_open(board)
+  open_spots = get_open_spots(board)
   if !wins.empty?
     wins.sample
   else
@@ -114,15 +100,17 @@ def get_computer_pick(board)
     if !losses.empty?
       losses.sample
     else
-      center = open_spots & CENTER
-      if !center.empty?
-        CENTER[0] #return the center position
+      center_open = open_spots.include?(4)
+      if center_open
+        4
       else
-        any_corner = open_spots & CORNERS
+        CORNERS.each do |spot|
+          any_corner.push(spot) if open_spots.include?(spot-1)
+        end
         if !any_corner.empty?
           any_corner.sample
         else
-          pick_random(board)
+          open_spots.sample-1
         end
       end
     end
@@ -130,14 +118,14 @@ def get_computer_pick(board)
 end
 
 def valid_pick?(pick,board)
-  board.include?(pick) && (1..9).include?(pick)
+  board.include?(pick)
 end
 
 def prompt_player(player,board)
   puts "#{player}, it's your turn!"
   player==COMPUTER_NAME ? pick=get_computer_pick(board) : pick=get_pick
   until valid_pick?(pick,board)
-    puts "Hey! That spot has already been claimed or your entry isn't between 1 and 9!"
+    puts "Hey! That is not an available spot!"
     # theoretically only a real player should get here
     pick=get_pick
   end
@@ -156,28 +144,16 @@ def update_board(pick,marker,board)
   board
 end
 
-
-def switch_turn(current_player,player1,player2)
-  if(current_player == player1)
-     player2
-  else
-     player1
-  end
+def switch_player(current_player,player1,player2)
+  current_player == player1 ? player2 : player1
 end
 
-def game_results(winner,loser)
-  puts "\nCongrats #{winner}! You won the game!"
-  puts "Drat of all drats #{loser}! You lost :("
-end
-
-def complete_game(board,player1,player2)
+def complete_game(board,current_player,player1,player2)
   show_board(board)
-  player1_picks = get_picked(board,PLAYER1_MARKER)
-  player2_picks = get_picked(board,PLAYER2_MARKER)
-  if win?(player1_picks)
-    game_results(player1,player2)
-  elsif win?(player2_picks)
-    game_results(player2,player1)
+  if win?(board)
+    # if there is a win, the player whose turn it WAS is the winner
+    winner = switch_player(current_player,player1,player2)
+    puts "\nCongrats #{winner}! You won the game!"
   else
     puts "It's a draw. You both lost :/"
   end
@@ -203,9 +179,9 @@ def tictactoe
   current_player = player1
   until game_over?(board)
     board = take_turn(current_player,board,markers[current_player])
-    current_player = current_player == player1 ? player2 : player1 # OLD => switch_turn(current_player,player1,player2)
+    current_player = switch_player(current_player,player1,player2)
   end
-  complete_game(board,player1,player2)
+  complete_game(board,current_player,player1,player2)
 end
 
 def play_tictactoe
