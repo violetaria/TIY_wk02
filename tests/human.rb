@@ -22,7 +22,7 @@ class Human
   end
 
   def drink!
-    @coffees[0].drink!
+    @coffees[0].sip!
     @coffees.pop if(@coffees[0].empty?)
     @alertness += 0.333
   end

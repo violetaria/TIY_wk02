@@ -16,7 +16,7 @@ class Coffee
    @level == 0
  end
 
- def drink!
+ def sip!
   @level -= 1
  end
 end
