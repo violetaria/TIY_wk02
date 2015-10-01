@@ -2,7 +2,7 @@ require "pry"
 require "./human"
 require "./random"
 require "./counting"
-require "./smart"
+require "./smart_hard"
 
 MAX_NUMBER = 100
 
@@ -13,11 +13,13 @@ class GuessingGame
 
   def play
     number = rand(1..MAX_NUMBER)
-    result = nil # setup result variable
-    guess = @player.get_guess_new(result)
+    result = nil  # setup result variable
+    guess = @player.get_guess(result)
     count = 0
-    last_temp = 0
+    temp = get_temp(guess,number)
     until guess == number
+      guess = @player.get_guess(result)
+      last_temp = temp
       temp = get_temp(guess,number)
       if temp < last_temp
         result = :warmer
@@ -26,22 +28,20 @@ class GuessingGame
         result = :colder
         puts "Colder!"
       end
-      guess = @player.get_guess_new(result)
-      last_temp = temp
       count += 1
-      binding.pry
-    # guess - number - guess to determine if it's warmer or colder
+      puts "number = #{number}, guess=#{guess} and last=#{last_temp} and temp=#{temp}"
+#      binding.pry
     end
+    puts "You win! Took #{count} tries. The number was #{number}."
   end
 
   def get_temp(guess,number)
     (number - guess).abs
   end
+end
 
 game = GuessingGame.new(SmartPlayer.new)
 
 game.play
-
-binding.pry
 
 puts "just screwing around"

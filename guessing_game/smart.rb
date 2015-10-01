@@ -14,6 +14,7 @@ class SmartPlayer
     @guess = get_middle
   end
 
+  private
   def get_middle
     (@low + @high) / 2
   end
