@@ -48,6 +48,7 @@ Are there things you can do now which might make it easier to adapt this code in
 
 ## HumanPlayer < Player
  * get_move - get input from player
+ * get_name
 
 ## RandomPlayer < Player
  * get_move - pick random move
