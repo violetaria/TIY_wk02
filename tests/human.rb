@@ -14,7 +14,9 @@ class Human
   end
 
   def needs_coffee?
-    @alertness == 0 # may need to make this < 0.9
+    # @alertness == 0 # may need to make this < 0.9
+    # !(self.has_coffee?)
+    @alertness < 0.9
   end
 
   def buy(coffee)
@@ -24,6 +26,6 @@ class Human
   def drink!
     @coffees[0].sip!
     @coffees.pop if(@coffees[0].empty?)
-    @alertness += 0.333
+    @alertness += 0.33
   end
 end
