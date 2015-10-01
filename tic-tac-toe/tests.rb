@@ -38,21 +38,40 @@ class BoardTest < MiniTest::Test
   def setup
     #@computer = RandomPlayer.new
     #@human = HumanPlayer.new("Terri")
-    @board = Board.new
+    @valid_moves = (1..9).to_a
   end
   def test_can_make_board
-    assert @board
+    board = Board.new
+    assert board
   end
 
   def test_can_display_board
-    assert_output(/^[|\s1-9]+$/) { @board.display }
+    board = Board.new
+    assert_output(/^[|\s1-9]+$/) { board.display }
   end
 
   def test_can_update_board
-    move = (1..9).to_a
-    move.each do |spot|
-      @board.update!(spot,"X")
-      assert_equal @board.get_value(spot),"X"
+    board = Board.new
+    @valid_moves.each do |spot|
+      board.update!(spot-1,"X")
+      assert_equal board.get_value(spot-1),"X"
     end
   end
+
+  def test_can_user_win?
+    board = Board.new
+    refute board.win?
+    WINNING_BOARDS.each do |x,y,z|
+      board.update!(x,"X")
+      board.update!(y,"X")
+      board.update!(z,"X")
+      assert board.win?
+      board.update!(x,x+1)
+      board.update!(y,y+1)
+      board.update!(z,z+1)
+    end
+  end
+
+
+
 end
