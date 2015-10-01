@@ -47,7 +47,8 @@ Are there things you can do now which might make it easier to adapt this code in
  * initialize (name or "Unimatrix Zero")
 
 ## HumanPlayer < Player
- * get_move - get input from player
+ * get_move - get input from player, some way to validate? not sure where validate should be...
+ - players should not really know what's valid, honestly the game or board should know that right?
  * get_name
 
 ## RandomPlayer < Player
@@ -65,5 +66,6 @@ Are there things you can do now which might make it easier to adapt this code in
  * initialize(?)
  * display
  * update!
+ * move_valid?
  * win? <-- not sure if this should be in board or game
  * draw? <-- not sure if this should be in board or game
