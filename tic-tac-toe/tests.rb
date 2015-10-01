@@ -3,6 +3,7 @@ require 'minitest/autorun'
 require './player'
 require './human'
 require './random'
+require './board'
 
 class PlayerTest < MiniTest::Test
   def test_can_make_player
@@ -15,22 +16,12 @@ class PlayerTest < MiniTest::Test
 end
 
 class HumanPlayerTest < MiniTest::Test
-  def setup
-    @named_human_player = HumanPlayer.new("Terri")
-  end
   def test_can_make_human_player
+    @named_human_player = HumanPlayer.new("Terri")
     assert_equal(@named_human_player.name,"Terri")
-
-    HumanPlayer.stub :new, "Yang" do
-      unnamed_human_player = HumanPlayer.new
-      refute_equal(unnamed_human_player ,"Unimatrix Zero")
-    end
-  end
-
-  def test_can_human_get_move
-    ## TODO
   end
 end
+
 
 class RandomPlayerTest < MiniTest::Test
   def setup
@@ -40,10 +31,19 @@ class RandomPlayerTest < MiniTest::Test
   def test_can_make_random_player
     assert_equal(@player.name,"Unimatrix Zero")
   end
+end
 
-  def test_can_random_get_move
-    move = @player.get_move
-    valid_move = (1..9).to_a
-    100.times { assert_includes(valid_move,move) }
+class BoardTest < MiniTest::Test
+  def setup
+    #@computer = RandomPlayer.new
+    #@human = HumanPlayer.new("Terri")
+    @board = Board.new
+  end
+  def test_can_make_board
+    assert @board
+  end
+
+  def test_can_display_board
+    assert_output(/^[|\s1-9]+$/) { @board.display }
   end
 end
