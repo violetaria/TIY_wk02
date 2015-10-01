@@ -1,3 +1,4 @@
+require 'pry'
 require 'minitest/autorun'
 
 require './player'
@@ -45,5 +46,13 @@ class BoardTest < MiniTest::Test
 
   def test_can_display_board
     assert_output(/^[|\s1-9]+$/) { @board.display }
+  end
+
+  def test_can_update_board
+    move = (1..9).to_a
+    move.each do |spot|
+      @board.update(spot,"X")
+      assert_equal @board.get_value(spot),"X"
+    end
   end
 end
