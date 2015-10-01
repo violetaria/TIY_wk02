@@ -1,5 +1,7 @@
 require 'minitest/autorun'
 
+require './player'
+
 class PlayerTest < MiniTest::Test
   def test_can_make_player
     named_player = Player.new("Terri")
@@ -9,3 +11,4 @@ class PlayerTest < MiniTest::Test
     assert unnamed_player.name == "Unimatrix Zero"
   end
 end
+
