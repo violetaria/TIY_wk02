@@ -51,7 +51,7 @@ class BoardTest < MiniTest::Test
   def test_can_update_board
     move = (1..9).to_a
     move.each do |spot|
-      @board.update(spot,"X")
+      @board.update!(spot,"X")
       assert_equal @board.get_value(spot),"X"
     end
   end

@@ -12,7 +12,7 @@ class Board
         "
   end
 
-  def update(move,piece)
+  def update!(move,piece)
     @board[move-1] = piece
   end
 
