@@ -15,6 +15,12 @@ class PlayerTest < MiniTest::Test
     unnamed_player = Player.new
     assert_equal(unnamed_player.name,"Unimatrix Zero")
   end
+
+  def test_can_set_and_get_token
+    player = Player.new
+    player.token = "X"
+    assert player.token,"X"
+  end
 end
 
 class HumanPlayerTest < MiniTest::Test
@@ -148,4 +154,14 @@ class GameTest < MiniTest::Test
   #  binding.pry
     assert game.game_over?
   end
+
+  def test_can_player_take_turn
+    game = Game.new(RandomPlayer.new,RandomPlayer.new,Board.new)
+    first_player = game.current_player
+    game.take_turn
+    refute_equal first_player,game.current_player
+    # do we need to check for open spots?
+  end
+
+
 end
