@@ -35,9 +35,23 @@ class Game
       @board.display
     end
     print_game_results
+    # if play_again?
+    #   self.reset!
+    #   self.play
+    # end
+  end
+
+  def play_again
+    reset!
+    play
   end
 
   private
+  def reset!
+    @board = Board.new
+    @current_player = @player1
+  end
+
   def prompt_player
     puts "#{@current_player.name} using #{@current_player.token}'s, it's your turn!"
   end
@@ -51,4 +65,19 @@ class Game
     puts @board.win? ? "Congrats #{@current_player.name}!  You won!" : "It's a draw."
   end
 
+  def greeting
+    puts "Welcome to Tic-Tac-Toe!"
+    puts
+    puts "Rules:
+        Game supports 1 or 2 players.
+        Players alternate turns.
+        Player1 = Xs
+        Player2 = Os
+
+        Each position on the board is numbered.
+        During your turn, enter a number which corresponds to an open position.
+        If a number is replaced by an X or an O, that spot has already been claimed.
+        Ready, Set, Go!
+        "
+  end
 end

@@ -161,11 +161,10 @@ class GameTest < MiniTest::Test
     player1 = RandomPlayer.new
     player2 = RandomPlayer.new
     game = Game.new(player1,player2,board)
-    board.stub :display, "" do
-      game.stub :prompt_player, "" do
-        game.take_turn
-      end
+    game.stub :puts, nil do
+      game.take_turn
     end
+
     refute_equal player1,game.current_player
     # do we need to check for open spots?
   end
@@ -175,11 +174,9 @@ class GameTest < MiniTest::Test
     game = Game.new(RandomPlayer.new,RandomPlayer.new, board)
     refute game.game_over?
 
-    board.stub :display, "" do
-      game.stub :prompt_player, "" do
-        game.stub :print_game_results, "" do
-          game.play
-        end
+    game.stub :puts, nil do
+      board.stub :puts, nil do
+        game.play
       end
     end
 
@@ -187,6 +184,23 @@ class GameTest < MiniTest::Test
   end
 
   def test_can_reset_game
+    board = Board.new
+    game = Game.new(RandomPlayer.new,RandomPlayer.new, board)
+    refute game.game_over?
 
+    game.stub :puts, nil do
+      board.stub :puts, nil do
+        game.play
+      end
+    end
+
+    assert game.game_over?
+
+    game.stub :puts, nil do
+      board.stub :puts, nil do
+        game.play_again
+      end
+    end
+    assert game.game_over?
   end
 end

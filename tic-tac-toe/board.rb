@@ -35,7 +35,7 @@ class Board
   end
 
   def valid_move?(move)
-    move.is_a?(Fixnum) && @board.include?(move)
+    @board.include?(move)
   end
 
 end
