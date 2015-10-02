@@ -65,9 +65,9 @@ class BoardTest < MiniTest::Test
       board.update!(y+1,"X")
       board.update!(z+1,"X")
       assert board.win?
-      board.update!(x,x+1)
-      board.update!(y,y+1)
-      board.update!(z,z+1)
+      board.update!(x+1,x+1)
+      board.update!(y+1,y+1)
+      board.update!(z+1,z+1)
     end
   end
 
@@ -82,18 +82,17 @@ class BoardTest < MiniTest::Test
     board.update!(3,"X")
     refute board.draw?
 
-    # draw board = [ X O X
-    #                O X O
-    #                X O X]
+    # draw board = [ X", "X", "O", "O", "X", "X", "X", "O", "O"]
     board.update!(1,"X")
-    board.update!(2,"O")
-    board.update!(3,"X")
+    board.update!(2,"X")
+    board.update!(3,"O")
     board.update!(4,"O")
     board.update!(5,"X")
-    board.update!(6,"O")
+    board.update!(6,"X")
     board.update!(7,"X")
     board.update!(8,"O")
-    board.update!(9,"X")
+    board.update!(9,"O")
+
     assert board.draw?
   end
 
@@ -116,5 +115,37 @@ class GameTest < MiniTest::Test
   def test_can_make_game
     game = Game.new(HumanPlayer.new("Terri"),HumanPlayer.new("Yang"),Board.new)
     assert game
+  end
+
+  def test_can_determine_game_over?
+    board = Board.new
+
+    game = Game.new(HumanPlayer.new("Terri"),HumanPlayer.new("Yang"),board)
+
+    refute game.game_over?
+
+    WINNING_BOARDS.each do |x,y,z|
+      board.update!(x+1,"X")
+      board.update!(y+1,"X")
+      board.update!(z+1,"X")
+      assert game.game_over?
+      board.update!(x+1,x+1)
+      board.update!(y+1,y+1)
+      board.update!(z+1,z+1)
+    end
+    refute game.game_over?
+
+    board.update!(1,"X")
+    board.update!(2,"X")
+    board.update!(3,"O")
+    board.update!(4,"O")
+    board.update!(5,"X")
+    board.update!(6,"X")
+    board.update!(7,"X")
+    board.update!(8,"O")
+    board.update!(9,"O")
+
+  #  binding.pry
+    assert game.game_over?
   end
 end
