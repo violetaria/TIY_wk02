@@ -141,6 +141,7 @@ class GameTest < MiniTest::Test
     end
     refute game.game_over?
 
+    ## test for draw
     board.update!(1,"X")
     board.update!(2,"X")
     board.update!(3,"O")
@@ -163,5 +164,15 @@ class GameTest < MiniTest::Test
     # do we need to check for open spots?
   end
 
+  def test_can_play_game
+    game = Game.new(RandomPlayer.new,RandomPlayer.new,Board.new)
+    refute game.game_over?
 
+    game.play
+    assert game.game_over?
+  end
+
+  def test_can_reset_game
+
+  end
 end
