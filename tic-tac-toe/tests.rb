@@ -72,6 +72,26 @@ class BoardTest < MiniTest::Test
     end
   end
 
+  def test_can_user_draw?
+    board = Board.new
+    refute board.draw?
+    board.update!(0,"X")
+    board.update!(1,"X")
+    board.update!(2,"X")
+    refute board.draw?
 
-
+    # draw board = [ X O X
+    #                O X O
+    #                X O X]
+    board.update!(0,"X")
+    board.update!(1,"O")
+    board.update!(2,"X")
+    board.update!(3,"O")
+    board.update!(4,"X")
+    board.update!(5,"O")
+    board.update!(6,"X")
+    board.update!(7,"O")
+    board.update!(8,"X")
+    assert board.draw?
+  end
 end

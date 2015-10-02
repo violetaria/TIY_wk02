@@ -28,5 +28,9 @@ class Board
     end
   end
 
-
+  def draw?
+    @board.all? do |x|
+      x.is_a?(String)
+    end
+  end
 end
