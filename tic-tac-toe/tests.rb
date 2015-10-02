@@ -5,6 +5,7 @@ require './player'
 require './human'
 require './random'
 require './board'
+require './game'
 
 class PlayerTest < MiniTest::Test
   def test_can_make_player
@@ -108,5 +109,12 @@ class BoardTest < MiniTest::Test
     refute board.valid_move?(".")
 
     refute board.valid_move?("bull terrier")
+  end
+end
+
+class GameTest < MiniTest::Test
+  def test_can_make_game
+    game = Game.new(HumanPlayer.new("Terri"),HumanPlayer.new("Yang"),Board.new)
+    assert game
   end
 end
