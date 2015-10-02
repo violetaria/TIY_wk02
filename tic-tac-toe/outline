@@ -59,8 +59,16 @@ Are there things you can do now which might make it easier to adapt this code in
  * play
  * take_turn
  * gave_over?
- * play_again?
  * reset_game
+ * display_scoreboard
+
+### ScoreBoard
+ * initialize()
+ * update!
+ * get_score
+ * display
+
+
 
 ### Board
  * initialize(?)

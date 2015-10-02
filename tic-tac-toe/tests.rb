@@ -6,6 +6,7 @@ require './human'
 require './random'
 require './board'
 require './game'
+require './scoreboard'
 
 class PlayerTest < MiniTest::Test
   def test_can_make_player
@@ -121,6 +122,35 @@ class GameTest < MiniTest::Test
   def test_can_make_game
     game = Game.new(HumanPlayer.new("Terri"),HumanPlayer.new("Yang"),Board.new)
     assert game
+  end
+
+end
+
+class ScoreBaordTest < MiniTest::Test
+  def test_can_make_scoreboard
+    scoreboard = ScoreBoard.new
+    assert scoreboard
+  end
+
+  def test_can_update_wins
+    scoreboard = ScoreBoard.new
+    assert_equal scoreboard.wins,0
+    scoreboard.add_win
+    assert_equal scoreboard.wins,1
+  end
+
+  def test_can_update_losses
+    scoreboard = ScoreBoard.new
+    assert_equal scoreboard.losses,0
+    scoreboard.add_loss
+    assert_equal scoreboard.losses,1
+  end
+
+  def test_can_update_draws
+    scoreboard = ScoreBoard.new
+    assert_equal scoreboard.draws,0
+    scoreboard.add_draw
+    assert_equal scoreboard.draws,1
   end
 
 end

@@ -1,3 +1,5 @@
+require './scoreboard'
+
 class Game
   def initialize(player1,player2,board)
     @player1 = player1
@@ -6,6 +8,8 @@ class Game
     @player2.token = "O"
     @board = board
     @current_player = @player1
+    @player1_scoreboard = ScoreBoard.new
+    @player2_scoreboard = ScoreBoard.new
   end
 
   def play
@@ -15,6 +19,8 @@ class Game
       @board.display
     end
     print_game_results
+    update_score
+    display_scoreboard
   end
 
   def reset!
@@ -24,8 +30,36 @@ class Game
 
   private
 
+  def display_scoreboard
+    puts "_____________________________________"
+    puts "#{@player1.name} [#{@player1.token}] Scoreboard"
+    @player1_scoreboard.display_scoreboard
+    puts "-------------------------------------"
+    puts "#{@player2.name} [#{@player2.token}] Scoreboard"
+    @player2_scoreboard.display_scoreboard
+    puts "_____________________________________"
+    puts
+  end
+
+  # this assumes it's run after the print_game_results
+  # print_game_results should have already switched current_player to the winning player
+  def update_score
+    if @board.draw?
+      @player1_scoreboard.add_draw
+      @player2_scoreboard.add_draw
+    else
+      if @current_player == @player1
+        @player1_scoreboard.add_win
+        @player2_scoreboard.add_loss
+      else
+        @player2_scoreboard.add_win
+        @player1_scoreboard.add_loss
+      end
+    end
+  end
+
   def prompt_player
-    puts "#{@current_player.name} using #{@current_player.token}'s, it's your turn!"
+    puts "#{@current_player.name} [#{@current_player.token}], it's your turn!"
   end
 
   def switch_current_player
@@ -34,7 +68,7 @@ class Game
 
   def print_game_results
     switch_current_player
-    puts @board.win? ? "Congrats #{@current_player.name}!  You won!" : "It's a draw."
+    puts @board.win? ? "Congrats #{@current_player.name} [#{@current_player.token}]!  You won!" : "It's a draw."
   end
 
   def greeting
