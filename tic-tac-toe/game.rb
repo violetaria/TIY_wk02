@@ -18,7 +18,7 @@ class Game
 
   def take_turn
     # does this need to be a function? (we had prompt player before)
-    puts "#{@current_player.name} using #{@current_player.token}'s, it's your turn!"
+    prompt_player
     move = @current_player.get_move
     until @board.valid_move?(move)
       puts "#{move} is not a valid move.  Choose again."
@@ -38,6 +38,10 @@ class Game
   end
 
   private
+  def prompt_player
+    puts "#{@current_player.name} using #{@current_player.token}'s, it's your turn!"
+  end
+
   def switch_current_player
     @current_player = @current_player == @player1 ? @player2 : @player1
   end

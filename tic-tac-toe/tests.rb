@@ -157,18 +157,32 @@ class GameTest < MiniTest::Test
   end
 
   def test_can_player_take_turn
-    game = Game.new(RandomPlayer.new,RandomPlayer.new,Board.new)
-    first_player = game.current_player
-    game.take_turn
-    refute_equal first_player,game.current_player
+    board = Board.new
+    player1 = RandomPlayer.new
+    player2 = RandomPlayer.new
+    game = Game.new(player1,player2,board)
+    board.stub :display, "" do
+      game.stub :prompt_player, "" do
+        game.take_turn
+      end
+    end
+    refute_equal player1,game.current_player
     # do we need to check for open spots?
   end
 
   def test_can_play_game
-    game = Game.new(RandomPlayer.new,RandomPlayer.new,Board.new)
+    board = Board.new
+    game = Game.new(RandomPlayer.new,RandomPlayer.new, board)
     refute game.game_over?
 
-    game.play
+    board.stub :display, "" do
+      game.stub :prompt_player, "" do
+        game.stub :print_game_results, "" do
+          game.play
+        end
+      end
+    end
+
     assert game.game_over?
   end
 
