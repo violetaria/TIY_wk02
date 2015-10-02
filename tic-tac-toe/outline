@@ -72,6 +72,8 @@ Are there things you can do now which might make it easier to adapt this code in
 
 ### Board
  * initialize(?)
+ * build_board(n)
+
  * display
  * update!
  * move_valid?

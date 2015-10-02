@@ -44,7 +44,6 @@ end
 
 class BoardTest < MiniTest::Test
   def setup
-    @valid_moves = (1..9).to_a
   end
   def test_can_make_board
     board = Board.new
@@ -57,8 +56,9 @@ class BoardTest < MiniTest::Test
   end
 
   def test_can_update_board
+    valid_moves = (1..9).to_a
     board = Board.new
-    @valid_moves.each do |spot|
+    valid_moves.each do |spot|
       board.update!(spot,"X")
       assert_equal board.get_value(spot),"X"
     end
@@ -104,8 +104,9 @@ class BoardTest < MiniTest::Test
   end
 
   def test_is_move_valid?
+    valid_moves = (1..9).to_a
     board = Board.new
-    move = @valid_moves.sample
+    move = valid_moves.sample
     assert board.valid_move?(move)
 
     board.update!(move,"X")

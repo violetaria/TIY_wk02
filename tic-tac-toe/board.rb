@@ -1,8 +1,8 @@
 WINNING_BOARDS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
 
 class Board
-  def initialize
-    @board = (1..9).to_a
+  def initialize(n=3)
+    @board = (1..(n*n)).to_a
   end
 
   # maybe move this to game?
