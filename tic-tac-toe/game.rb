@@ -8,49 +8,21 @@ class Game
     @current_player = @player1
   end
 
-  def game_over?
-    @board.win? || @board.draw?
-  end
-
-  def current_player
-    @current_player
-  end
-
-  def take_turn
-    # does this need to be a function? (we had prompt player before)
-    prompt_player
-    move = @current_player.get_move
-    until @board.valid_move?(move)
-      puts "#{move} is not a valid move.  Choose again."
-      move = @current_player.get_move
-    end
-    @board.update!(move,@current_player.token)
-    switch_current_player
-  end
-
   def play
     @board.display  # display initial board
-    until self.game_over?
-      self.take_turn
+    until game_over?
+      take_turn
       @board.display
     end
     print_game_results
-    # if play_again?
-    #   self.reset!
-    #   self.play
-    # end
   end
 
-  def play_again
-    reset!
-    play
-  end
-
-  private
   def reset!
     @board = Board.new
     @current_player = @player1
   end
+
+  private
 
   def prompt_player
     puts "#{@current_player.name} using #{@current_player.token}'s, it's your turn!"
@@ -81,4 +53,20 @@ class Game
         Ready, Set, Go!
         "
   end
+
+  def game_over?
+    @board.win? || @board.draw?
+  end
+
+  def take_turn
+    prompt_player
+    move = @current_player.get_move
+    until @board.valid_move?(move)
+      puts "#{move} is not a valid move.  Choose again."
+      move = @current_player.get_move
+    end
+    @board.update!(move,@current_player.token)
+    switch_current_player
+  end
+
 end

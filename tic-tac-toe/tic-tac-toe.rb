@@ -36,5 +36,8 @@ until replay == "n"
     puts "Play again? (y or n)"
     replay = gets.chop.downcase
   end
-  game.play_again if replay == "y"
+  if replay == "y"
+    game.reset!
+    game.play
+  end
 end
