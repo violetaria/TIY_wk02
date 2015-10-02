@@ -4,8 +4,10 @@ class HumanPlayer < Player
   end
 
   def get_move
-    print "Please pick an open spot: "
-    gets.chomp.to_i
+    print "\nPlease pick an open spot: "
+    move = gets.chomp.to_i
+    puts "#{@name} chose #{move}"
+    move
   end
 
   private

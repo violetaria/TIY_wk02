@@ -5,6 +5,8 @@ class RandomPlayer < Player
   end
 
   def get_move
-    @valid_moves.sample
+    move = @valid_moves.sample
+    puts "#{@name} chose #{move}"
+    move
   end
 end

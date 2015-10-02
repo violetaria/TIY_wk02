@@ -29,8 +29,8 @@ class Game
   end
 
   def play
+    @board.display  # display initial board
     until self.game_over?
-      @board.display
       self.take_turn
       @board.display
     end
@@ -69,12 +69,13 @@ class Game
     puts "Welcome to Tic-Tac-Toe!"
     puts
     puts "Rules:
-        Game supports 1 or 2 players.
+        Game supports 0 to 2 human players.
+        Non-human players will be replaced by Computer players.
         Players alternate turns.
         Player1 = Xs
         Player2 = Os
 
-        Each position on the board is numbered.
+        Each position on the board is numbered 1 to 9.
         During your turn, enter a number which corresponds to an open position.
         If a number is replaced by an X or an O, that spot has already been claimed.
         Ready, Set, Go!
