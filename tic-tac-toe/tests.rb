@@ -36,8 +36,6 @@ end
 
 class BoardTest < MiniTest::Test
   def setup
-    #@computer = RandomPlayer.new
-    #@human = HumanPlayer.new("Terri")
     @valid_moves = (1..9).to_a
   end
   def test_can_make_board
@@ -53,18 +51,18 @@ class BoardTest < MiniTest::Test
   def test_can_update_board
     board = Board.new
     @valid_moves.each do |spot|
-      board.update!(spot-1,"X")
-      assert_equal board.get_value(spot-1),"X"
+      board.update!(spot,"X")
+      assert_equal board.get_value(spot),"X"
     end
   end
 
-  def test_can_user_win?
+  def test_can_detect_win?
     board = Board.new
     refute board.win?
     WINNING_BOARDS.each do |x,y,z|
-      board.update!(x,"X")
-      board.update!(y,"X")
-      board.update!(z,"X")
+      board.update!(x+1,"X")
+      board.update!(y+1,"X")
+      board.update!(z+1,"X")
       assert board.win?
       board.update!(x,x+1)
       board.update!(y,y+1)
@@ -72,26 +70,43 @@ class BoardTest < MiniTest::Test
     end
   end
 
-  def test_can_user_draw?
+  def test_can_detect_draw?
     board = Board.new
     refute board.draw?
-    board.update!(0,"X")
+    # win board = [ X X X
+    #               4 5 6
+    #               7 8 9]
     board.update!(1,"X")
     board.update!(2,"X")
+    board.update!(3,"X")
     refute board.draw?
 
     # draw board = [ X O X
     #                O X O
     #                X O X]
-    board.update!(0,"X")
-    board.update!(1,"O")
-    board.update!(2,"X")
-    board.update!(3,"O")
-    board.update!(4,"X")
-    board.update!(5,"O")
-    board.update!(6,"X")
-    board.update!(7,"O")
-    board.update!(8,"X")
+    board.update!(1,"X")
+    board.update!(2,"O")
+    board.update!(3,"X")
+    board.update!(4,"O")
+    board.update!(5,"X")
+    board.update!(6,"O")
+    board.update!(7,"X")
+    board.update!(8,"O")
+    board.update!(9,"X")
     assert board.draw?
+  end
+
+  def test_is_move_valid?
+    board = Board.new
+    move = @valid_moves.sample
+    assert board.valid_move?(move)
+
+    board.update!(move,"X")
+
+    refute board.valid_move?(move)
+
+    refute board.valid_move?(".")
+
+    refute board.valid_move?("bull terrier")
   end
 end

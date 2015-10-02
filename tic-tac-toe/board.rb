@@ -15,11 +15,11 @@ class Board
   end
 
   def update!(move,piece)
-    @board[move] = piece
+    @board[move-1] = piece
   end
 
   def get_value(spot)
-    @board[spot]
+    @board[spot-1]
   end
 
   def win?
@@ -33,4 +33,9 @@ class Board
       x.is_a?(String)
     end
   end
+
+  def valid_move?(move)
+    move.is_a?(Fixnum) && @board.include?(move)
+  end
+
 end
