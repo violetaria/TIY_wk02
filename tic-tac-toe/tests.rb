@@ -65,25 +65,54 @@ class BoardTest < MiniTest::Test
   end
 
   def test_can_detect_win?
-    board = Board.new
+    board = Board.new(3)
     refute board.win?
-    WINNING_BOARDS.each do |x,y,z|
-      board.update!(x+1,"X")
-      board.update!(y+1,"X")
-      board.update!(z+1,"X")
-      assert board.win?
-      board.update!(x+1,x+1)
-      board.update!(y+1,y+1)
-      board.update!(z+1,z+1)
-    end
+    board.update!(1,"X")
+    board.update!(2,"X")
+    board.update!(3,"X")
+    assert board.win?
+  end
+
+  def test_can_detect_diagonal_win?
+    board = Board.new(5)
+    refute board.win?
+    board.update!(1,"X")
+    board.update!(7,"X")
+    board.update!(13,"X")
+    board.update!(19,"X")
+    board.update!(25,"X")
+    assert board.win?
+  end
+
+  def test_can_detect_vertical_win?
+    board = Board.new(4)
+    refute board.win?
+    board.update!(3,"X")
+    board.update!(7,"X")
+    board.update!(11,"X")
+    board.update!(15,"X")
+    assert board.win?
+  end
+
+  def test_can_detect_horizontal_win?
+    board = Board.new(10)
+    refute board.win?
+    board.update!(11,"X")
+    board.update!(12,"X")
+    board.update!(13,"X")
+    board.update!(14,"X")
+    board.update!(15,"X")
+    board.update!(16,"X")
+    board.update!(17,"X")
+    board.update!(18,"X")
+    board.update!(19,"X")
+    board.update!(20,"X")
+    assert board.win?
   end
 
   def test_can_detect_draw?
-    board = Board.new
+    board = Board.new(3)
     refute board.draw?
-    # win board = [ X X X
-    #               4 5 6
-    #               7 8 9]
     board.update!(1,"X")
     board.update!(2,"X")
     board.update!(3,"X")
@@ -117,6 +146,7 @@ class BoardTest < MiniTest::Test
 
     refute board.valid_move?("bull terrier")
   end
+
 end
 
 class GameTest < MiniTest::Test
