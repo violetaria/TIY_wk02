@@ -7,14 +7,6 @@ class Board
     @winning_boards = get_winning_boards
   end
 
-  def get_winning_boards
-    @winning_boards = calculate_horizontal_wins + calculate_vertical_wins + calculate_diagonal_wins
-    #print @winning_boards
-    #binding.pry
-
-    @winning_boards
-  end
-
   def display
   ## this really only works up to a certain point
     puts
@@ -93,6 +85,10 @@ class Board
       vertical_wins.push(win)
     end
     vertical_wins
+  end
+
+  def get_winning_boards
+    @winning_boards = calculate_horizontal_wins + calculate_vertical_wins + calculate_diagonal_wins
   end
 
 end
